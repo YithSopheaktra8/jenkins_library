@@ -16,13 +16,13 @@ pipeline {
                     sh """
                         docker login -u $USER -p $PASSWORD
                     """
-                    script{
+                    script {
                         nextWithDocker(
-                            DOCKER_USER=$USER,
-                            DOCKER_TAGS=${BUILD_NUMBER},
-                            IMAGE_NAME=nextwithjenkens
+                            DOCKER_USER: env.USER,
+                            DOCKER_TAGS: "${env.BUILD_NUMBER}",
+                            IMAGE_NAME: 'nextwithjenkens'
                         )
-                }
+                    }
                 }
 
                 
