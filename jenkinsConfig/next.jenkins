@@ -1,0 +1,37 @@
+@Library(['jenkins_library']) _
+
+pipeline {
+    agent any
+
+    stages {
+        stage('git clone'){
+            steps{
+                git branch: 'main', url: 'https://gitlab.com/ite-2nd-cstad/kak-mobile-banking-api.git'
+            }
+        }
+        
+        stage('Hello') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dokcer-hub', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                    sh """
+                        docker login -u $USER -p $PASSWORD
+                    """
+                    script{
+                        nextWithDocker(
+                            DOCKER_USER=$USER,
+                            DOCKER_TAGS=${BUILD_NUMBER},
+                            IMAGE_NAME=nextwithjenkens
+                        )
+                }
+                }
+
+                
+            }
+        }
+        stage('list dir'){
+            steps{
+                sh "ls -lrt"
+            }
+        }
+    }
+}
