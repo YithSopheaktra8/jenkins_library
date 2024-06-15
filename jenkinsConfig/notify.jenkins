@@ -1,0 +1,32 @@
+@Library(['jenkinslib']) _
+pipeline {
+    agent any
+    environment {
+        BotToken = "6703655057:AAF08bFG7DqiMFglkB4-SncW06mU22DCN-A"
+        chat_id = "-4115938162"
+    }
+  
+    stages {
+        stage('clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Git Clone') {
+            steps {
+                git 'https://github.com/MuyleangIng/nextjs_docker.git'
+            }
+        }
+        stage('Hello') {
+            steps {
+                sh 'curl -s -X POST https://api.telegram.org/bot${env.BotToken}/sendMessage -d chat_id=${env.chat_id} -d text="Good Morning!"'
+
+            }
+        }
+        stage('List Directory') {
+            steps {
+                sh "ls -lrt"
+            }
+        }
+    }
+}
